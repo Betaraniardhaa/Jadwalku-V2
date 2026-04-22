@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Aplikasi pencatat tugas kuliah, jadwal kuliah, dan jadwal kerja.">
+  <meta name="theme-color" content="#e879a0">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Jadwalku">
+
+  <title>Jadwalku – Asisten Kampus & Kerja</title>
+
+  <link rel="manifest" href="./manifest.json">
+  <link rel="icon" href="./icons/icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="./icons/icon-192.png">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./assets/style.css">
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-logo">
+      <img src="./icons/logo.png" alt="Jadwalku" style="width:38px;height:38px;object-fit:contain;border-radius:10px;">
+    </div>
+    <div style="display:flex;align-items:center;gap:0.6rem;">
+      <div class="pwa-status" id="pwa-status" style="display:none;">
+        <span>✓</span> PWA
+      </div>
+      <div class="header-date" id="header-date"></div>
+    </div>
+  </header>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ========== BERANDA ========== -->
+  <section class="section active" id="sec-beranda">
+    <!-- Install Banner -->
+    <div class="install-banner" id="install-banner" style="margin-top:1.25rem;">
+      <span class="install-icon">📲</span>
+      <div class="install-banner-text">
+        <strong>Instal Jadwalku</strong>
+        <span>Akses lebih cepat dari layar beranda</span>
+      </div>
+      <button class="install-btn" id="btn-install">Instal</button>
+    </div>
+
+    <div style="padding-top:1.25rem;">
+      <!-- Greeting Card -->
+      <div class="greeting-card">
+        <h2 id="greeting-text">Selamat Pagi ☀️</h2>
+        <p>Ayo semangat jalani harimu, Sobat Jadwalku!</p>
+      </div>
+
+      <!-- Stats Grid -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">📝</div>
+          <div class="stat-num" id="stat-tugas">0</div>
+          <div class="stat-label">Tugas Aktif</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📅</div>
+          <div class="stat-num" id="stat-hari-ini">0</div>
+          <div class="stat-label">Jadwal Hari Ini</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📚</div>
+          <div class="stat-num" id="stat-kuliah">0</div>
+          <div class="stat-label">Mata Kuliah</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">💼</div>
+          <div class="stat-num" id="stat-kerja">0</div>
+          <div class="stat-label">Jadwal Kerja</div>
+        </div>
+      </div>
+
+      <!-- Jadwal Hari Ini -->
+      <div class="section-title"><span>📅</span> Jadwal Hari Ini</div>
+      <div id="today-schedule"></div>
+
+      <!-- Tugas Mendatang -->
+      <div class="section-title" style="margin-top:1rem;"><span>🔥</span> Tugas Mendatang</div>
+      <div id="upcoming-list"></div>
+    </div>
+  </section>
+
+  <!-- ========== TUGAS ========== -->
+  <section class="section" id="sec-tugas">
+    <div class="page-title" style="padding-top:1.25rem;">Daftar Tugas</div>
+    <div class="page-subtitle">Kelola tugas kuliah & kerja kamu</div>
+
+    <button class="add-btn" onclick="openModal('modal-tugas')">
+      <span>+</span> Tambah Tugas Baru
+    </button>
+
+    <!-- Filter Tabs -->
+    <div class="filter-tabs">
+      <button class="filter-tab active" data-filter="semua">Semua</button>
+      <button class="filter-tab" data-filter="aktif">Aktif</button>
+      <button class="filter-tab" data-filter="kuliah">📚 Kuliah</button>
+      <button class="filter-tab" data-filter="kerja">💼 Kerja</button>
+      <button class="filter-tab" data-filter="selesai">Selesai ✓</button>
+    </div>
+
+    <div id="task-list"></div>
+  </section>
+
+  <!-- ========== JADWAL KULIAH ========== -->
+  <section class="section" id="sec-kuliah">
+    <div class="page-title" style="padding-top:1.25rem;">Jadwal Kuliah</div>
+    <div class="page-subtitle">Kelola jadwal mata kuliah per hari</div>
+
+    <button class="add-btn" onclick="openModal('modal-kuliah')">
+      <span>+</span> Tambah Jadwal Kuliah
+    </button>
+
+    <!-- Day Tabs -->
+    <div class="day-tabs" id="kuliah-day-tabs"></div>
+
+    <div id="kuliah-list"></div>
+  </section>
+
+  <!-- ========== JADWAL KERJA ========== -->
+  <section class="section" id="sec-kerja">
+    <div class="page-title" style="padding-top:1.25rem;">Jadwal Kerja</div>
+    <div class="page-subtitle">Kelola jadwal kerja atau magang kamu</div>
+
+    <button class="add-btn" style="background:linear-gradient(135deg,#64b5f6,#9575cd);"
+      onclick="openModal('modal-kerja')">
+      <span>+</span> Tambah Jadwal Kerja
+    </button>
+
+    <!-- Day Tabs -->
+    <div class="day-tabs" id="kerja-day-tabs"></div>
+
+    <div id="kerja-list"></div>
+  </section>
+
+  <!-- ========== BOTTOM NAV ========== -->
+  <nav class="bottom-nav">
+    <button class="nav-item active" id="nav-beranda" onclick="navigate('beranda')">
+      <span class="nav-icon">🏠</span>
+      <span class="nav-label">Beranda</span>
+    </button>
+    <button class="nav-item" id="nav-tugas" onclick="navigate('tugas')">
+      <span class="nav-icon">📝</span>
+      <span class="nav-label">Tugas</span>
+    </button>
+    <button class="nav-item" id="nav-kuliah" onclick="navigate('kuliah')">
+      <span class="nav-icon">📚</span>
+      <span class="nav-label">Kuliah</span>
+    </button>
+    <button class="nav-item" id="nav-kerja" onclick="navigate('kerja')">
+      <span class="nav-icon">💼</span>
+      <span class="nav-label">Kerja</span>
+    </button>
+  </nav>
+
+  <!-- ========== MODAL: TAMBAH TUGAS ========== -->
+  <div class="modal-overlay" id="modal-tugas">
+    <div class="modal">
+      <div class="modal-handle"></div>
+      <div class="modal-title">📝 Tambah Tugas</div>
+      <form id="form-tugas">
+        <div class="form-group">
+          <label class="form-label">Judul Tugas *</label>
+          <input class="form-input" name="judul" placeholder="Contoh: Makalah Fisika Dasar" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Kategori *</label>
+            <select class="form-select" name="kategori" required>
+              <option value="kuliah">📚 Kuliah</option>
+              <option value="kerja">💼 Kerja</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Prioritas</label>
+            <select class="form-select" name="prioritas">
+              <option value="high">🔴 Tinggi</option>
+              <option value="medium" selected>🟡 Sedang</option>
+              <option value="low">🟢 Rendah</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Mata Kuliah / Nama Pekerjaan</label>
+          <input class="form-input" name="matkul" placeholder="Contoh: Fisika Dasar / Desain UI">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Deadline</label>
+          <input class="form-input" name="deadline" type="date">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Catatan</label>
+          <textarea class="form-textarea" name="catatan" placeholder="Detail tugas, referensi, atau pengingat..."></textarea>
+        </div>
+        <button type="submit" class="submit-btn">✅ Simpan Tugas</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========== MODAL: JADWAL KULIAH ========== -->
+  <div class="modal-overlay" id="modal-kuliah">
+    <div class="modal">
+      <div class="modal-handle"></div>
+      <div class="modal-title">📚 Tambah Jadwal Kuliah</div>
+      <form id="form-kuliah">
+        <div class="form-group">
+          <label class="form-label">Nama Mata Kuliah *</label>
+          <input class="form-input" name="nama" placeholder="Contoh: Algoritma & Pemrograman" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Hari *</label>
+          <select class="form-select" name="hari" required>
+            <option value="senin">Senin</option>
+            <option value="selasa">Selasa</option>
+            <option value="rabu">Rabu</option>
+            <option value="kamis">Kamis</option>
+            <option value="jumat">Jumat</option>
+            <option value="sabtu">Sabtu</option>
+            <option value="minggu">Minggu</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Jam Mulai *</label>
+            <input class="form-input" name="jamMulai" type="time" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Jam Selesai *</label>
+            <input class="form-input" name="jamSelesai" type="time" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Ruangan / Kelas</label>
+          <input class="form-input" name="ruangan" placeholder="Contoh: Lab Komputer 2 / Online (Zoom)">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nama Dosen</label>
+          <input class="form-input" name="dosen" placeholder="Contoh: Bpk. Budi Santoso, M.T.">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Catatan</label>
+          <input class="form-input" name="catatan" placeholder="Contoh: Bawa laptop, absen via Google Form">
+        </div>
+        <button type="submit" class="submit-btn">📚 Simpan Jadwal Kuliah</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========== MODAL: JADWAL KERJA ========== -->
+  <div class="modal-overlay" id="modal-kerja">
+    <div class="modal">
+      <div class="modal-handle"></div>
+      <div class="modal-title">💼 Tambah Jadwal Kerja</div>
+      <form id="form-kerja">
+        <div class="form-group">
+          <label class="form-label">Nama Pekerjaan / Shift *</label>
+          <input class="form-input" name="nama" placeholder="Contoh: Shift Pagi / Magang UI/UX" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Hari *</label>
+          <select class="form-select" name="hari" required>
+            <option value="senin">Senin</option>
+            <option value="selasa">Selasa</option>
+            <option value="rabu">Rabu</option>
+            <option value="kamis">Kamis</option>
+            <option value="jumat">Jumat</option>
+            <option value="sabtu">Sabtu</option>
+            <option value="minggu">Minggu</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Jam Mulai *</label>
+            <input class="form-input" name="jamMulai" type="time" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Jam Selesai *</label>
+            <input class="form-input" name="jamSelesai" type="time" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Lokasi / Tempat</label>
+          <input class="form-input" name="ruangan" placeholder="Contoh: Kantor Utama / WFH">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Posisi / Jabatan</label>
+          <input class="form-input" name="posisi" placeholder="Contoh: Frontend Dev Intern">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Catatan</label>
+          <input class="form-input" name="catatan" placeholder="Contoh: Bawa laptop, dresscode casual">
+        </div>
+        <button type="submit" class="submit-btn" style="background:linear-gradient(135deg,#64b5f6,#9575cd);">💼 Simpan Jadwal Kerja</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="./assets/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jadwalku – Offline</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: #f8f5ff;
+      display: flex; align-items: center; justify-content: center;
+      min-height: 100vh;
+      background-image: radial-gradient(ellipse at 20% 20%, #fce4ec 0%, transparent 50%),
+                        radial-gradient(ellipse at 80% 80%, #ede7f6 0%, transparent 50%);
+    }
+    .container {
+      text-align: center;
+      padding: 2rem;
+    }
+    .icon { font-size: 5rem; margin-bottom: 1rem; }
+    h1 { color: #c2185b; font-size: 1.8rem; font-weight: 800; margin-bottom: 0.5rem; }
+    p { color: #9575cd; font-size: 1rem; }
+    .btn {
+      margin-top: 1.5rem;
+      display: inline-block;
+      background: linear-gradient(135deg, #e879a0, #9575cd);
+      color: white;
+      padding: 0.75rem 2rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="icon">📡</div>
+    <h1>Kamu Sedang Offline</h1>
+    <p>Koneksi internet tidak tersedia.<br>Beberapa fitur mungkin tidak dapat diakses.</p>
+    <a href="./index.html" class="btn">Coba Lagi</a>
+  </div>
+</body>
+</html>
