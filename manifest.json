@@ -6,6 +6,7 @@
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
+  "display_override": ["window-controls-overlay", "tabbed", "standalone"],
   "background_color": "#f8f5ff",
   "theme_color": "#e879a0",
   "orientation": "portrait",
@@ -28,7 +29,8 @@
     {
       "src": "icons/screenshot1.png",
       "sizes": "1080x1920",
-      "type": "image/png"
+      "type": "image/png",
+      "form_factor": "narrow"
     }
   ],
   "shortcuts": [
@@ -51,5 +53,62 @@
       "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }]
     }
   ],
-  "categories": ["education", "productivity", "utilities"]
+  "categories": ["education", "productivity", "utilities"],
+
+  "launch_handler": {
+    "client_mode": "focus-existing"
+  },
+
+  "file_handlers": [
+    {
+      "action": "./index.html",
+      "accept": {
+        "text/plain": [".txt"],
+        "text/csv": [".csv"]
+      },
+      "icons": [{ "src": "icons/icon-192.png", "sizes": "192x192" }],
+      "launch_type": "single-client"
+    }
+  ],
+
+  "protocol_handlers": [
+    {
+      "protocol": "web+jadwalku",
+      "url": "./index.html?url=%s"
+    }
+  ],
+
+  "share_target": {
+    "action": "./index.html",
+    "method": "GET",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  },
+
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+
+  "note_taking": {
+    "new_note_url": "./index.html#tugas"
+  },
+
+  "widgets": [
+    {
+      "name": "Jadwalku Widget",
+      "tag": "jadwalku-widget",
+      "url": "./index.html",
+      "type": "text/html",
+      "multiple": false,
+      "icons": [
+        { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" }
+      ],
+      "screenshots": [],
+      "auth": false,
+      "update": 3600
+    }
+  ]
 }
